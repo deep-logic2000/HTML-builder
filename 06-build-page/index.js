@@ -84,10 +84,14 @@ const bundleHtml = async () => {
 };
 
 const createProject = async () => {
-  await createDistDir(destinationDir);
-  await copyAssetsFiles(sourceAssetsDir, destinationAssetsDir);
-  await bundleCss();
-  await bundleHtml();
+  try {
+    await createDistDir(destinationDir);
+    await copyAssetsFiles(sourceAssetsDir, destinationAssetsDir);
+    await bundleCss();
+    await bundleHtml();
+  } catch (err) {
+    console.error(err.message);
+  }
 };
 
 createProject();
