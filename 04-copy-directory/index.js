@@ -1,4 +1,4 @@
-const { rm, mkdir, readdir, copyFile, unlink } = require("node:fs/promises");
+const { rm, mkdir, readdir, copyFile } = require("node:fs/promises");
 const { join } = require("node:path");
 
 const sourceDir = join(__dirname, "files");
@@ -15,7 +15,6 @@ const copyFiles = async (sourceDir, destinationDir) => {
   const sourceFiles = await readdir(sourceDir, {
     withFileTypes: true,
   });
-  console.log(sourceFiles);
   for (const file of sourceFiles) {
     if (file.isDirectory()) {
       await mkdir(join(destinationDir, file.name), { recursive: true });
