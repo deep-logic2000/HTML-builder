@@ -8,14 +8,24 @@ const copyDir = async (sourceDir, destinationDir) => {
   await rm(destinationDir, { recursive: true, force: true });
   await mkdir(destinationDir, { recursive: true });
 
-  const sourceFiles = await readdir(sourceDir);
-
-  copyFiles(sourceFiles);
+  copyFiles(sourceDir, destinationDir);
 };
 
-const copyFiles = async (sourceFiles) => {
+const copyFiles = async (sourceDir, destinationDir) => {
+  const sourceFiles = await readdir(sourceDir, {
+    withFileTypes: true,
+  });
+  console.log(sourceFiles);
   for (const file of sourceFiles) {
-    await copyFile(join(sourceDir, file), join(destinationDir, file));
+    if (file.isDirectory()) {
+      await mkdir(join(destinationDir, file.name), { recursive: true });
+      await copyFiles(
+        join(sourceDir, file.name),
+        join(destinationDir, file.name)
+      );
+      continue;
+    }
+    await copyFile(join(sourceDir, file.name), join(destinationDir, file.name));
   }
 };
 
